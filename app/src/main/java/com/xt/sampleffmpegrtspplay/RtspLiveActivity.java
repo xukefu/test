@@ -22,6 +22,7 @@ public class RtspLiveActivity extends AppCompatActivity {
 //        starter.putExtra("RTSP_URL", url);
         context.startActivity(starter);
         globalUrl = url;
+        System.out.println("start:"+globalUrl);
     }
 
     @Override
@@ -57,7 +58,8 @@ public class RtspLiveActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        mRtspPlayer.startPlay();
+        System.out.println("onResume");
+        mRtspPlayer.startPlay();
     }
 
     @Override

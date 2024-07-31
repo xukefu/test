@@ -4,129 +4,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-	android:orientation="vertical"
-    android:padding="16dp"
-	>
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/et_rtsp_url4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="RTSP URL 1"
-        tools:layout_editor_absoluteX="71dp"
-        tools:layout_editor_absoluteY="289dp" />
-
-    <EditText
-        android:id="@+id/et_rtsp_url3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="RTSP URL 1"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="228dp" />
-
-    <EditText
-        android:id="@+id/et_rtsp_url2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="RTSP URL 1"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="167dp" />
-
-
+    <!-- 第1行 -->
     <EditText
         android:id="@+id/et_rtsp_url1"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:hint="RTSP URL 1"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="74dp"
-        tools:layout_editor_absoluteY="107dp" />
+        android:hint=""
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btn_save1"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_save1"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:background="@android:color/holo_blue_dark"
         android:text="保存"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="233dp"
-        tools:layout_editor_absoluteY="112dp" />
-
-    <Button
-        android:id="@+id/btn_connect4"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_dark"
-        android:text="连接"
-        tools:layout_editor_absoluteX="355dp"
-        tools:layout_editor_absoluteY="299dp" />
-
-    <Button
-        android:id="@+id/btn_save3"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="保存"
-        tools:layout_editor_absoluteX="234dp"
-        tools:layout_editor_absoluteY="235dp" />
-
-    <Button
-        android:id="@+id/btn_connect3"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_dark"
-        android:text="连接"
-        tools:layout_editor_absoluteX="353dp"
-        tools:layout_editor_absoluteY="238dp" />
-
-    <Button
-        android:id="@+id/btn_connect2"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_dark"
-        android:text="连接"
-        tools:layout_editor_absoluteX="353dp"
-        tools:layout_editor_absoluteY="174dp" />
-
-    <Button
-        android:id="@+id/btn_save2"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="保存"
-        tools:layout_editor_absoluteX="233dp"
-        tools:layout_editor_absoluteY="171dp" />
-
-    <Button
-        android:id="@+id/btn_save4"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="保存"
-        tools:layout_editor_absoluteX="233dp"
-        tools:layout_editor_absoluteY="292dp" />
+        app:layout_constraintBottom_toBottomOf="@id/et_rtsp_url1"
+        app:layout_constraintLeft_toRightOf="@id/et_rtsp_url1"
+        app:layout_constraintTop_toTopOf="@id/et_rtsp_url1" />
 
     <Button
         android:id="@+id/btn_connect1"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
         android:background="@android:color/holo_red_dark"
         android:text="连接"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="355dp"
-        tools:layout_editor_absoluteY="110dp" />
+        app:layout_constraintBottom_toBottomOf="@id/btn_save1"
+        app:layout_constraintLeft_toRightOf="@id/btn_save1"
+        app:layout_constraintTop_toTopOf="@id/btn_save1"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/textView"
+<!--    <EditText-->
+<!--        android:id="@+id/et_rtsp_url2"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="RTSP URL 2"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toLeftOf="@+id/btn_save2"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btn_connect1" />-->
+<!--    -->
+
+<!--    <Button-->
+<!--        android:id="@+id/btn_save2"-->
+<!--        style="@style/Widget.AppCompat.Button.Colored"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="144dp"-->
+<!--        android:text="保存"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/et_rtsp_url2"-->
+<!--        app:layout_constraintLeft_toRightOf="@id/et_rtsp_url2"-->
+<!--        app:layout_constraintTop_toTopOf="@id/et_rtsp_url2" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btn_connect2"-->
+<!--        style="@style/Widget.AppCompat.Button.Colored"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="32dp"-->
+<!--        android:background="@android:color/holo_red_dark"-->
+<!--        android:text="连接"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/btn_save2"-->
+<!--        app:layout_constraintLeft_toRightOf="@id/btn_save2"-->
+<!--        app:layout_constraintTop_toTopOf="@id/btn_save2"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/vertical_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="选择连接"
-        tools:layout_editor_absoluteX="217dp"
-        tools:layout_editor_absoluteY="36dp" />
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <!-- 确保所有组件在ConstraintLayout中水平居中 -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/horizontal_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="et_rtsp_url1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

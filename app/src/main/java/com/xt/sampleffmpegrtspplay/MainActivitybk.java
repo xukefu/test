@@ -24,12 +24,6 @@
 //            // 设置指定的网络传输类型(蜂窝传输) 等于手机网络
 //            builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
 //
-//            // 设置感兴趣的网络功能
-//            // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-//
-//            // 设置感兴趣的网络：计费网络
-//            // builder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-//
 //            NetworkRequest request = builder.build();
 //            ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
 //                @TargetApi(Build.VERSION_CODES.M)

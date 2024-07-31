@@ -50,7 +50,7 @@ public class RtspPlayer {
     public void startPlay() {
         Toast toast = Toast.makeText(context, "播放url:"+url, Toast.LENGTH_SHORT);
         toast.show();
-
+        System.out.println("startPlay:"+url);
         mLoadingView.showLoading();
         mVideoView.setVideoPath(url);
         mVideoView.start();
