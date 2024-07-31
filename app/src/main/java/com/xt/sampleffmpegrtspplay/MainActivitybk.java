@@ -8,6 +8,7 @@
 //import android.net.NetworkRequest;
 //import android.os.Build;
 //import android.os.Bundle;
+//import android.util.Log;
 //
 //import androidx.appcompat.app.AppCompatActivity;
 //
@@ -18,6 +19,7 @@
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
 //        if (Build.VERSION.SDK_INT >= 21) {
+//            Log.e("lod","onCreate");
 //            final ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 //            NetworkRequest.Builder    builder             = new NetworkRequest.Builder();
 //
@@ -29,6 +31,7 @@
 //                @TargetApi(Build.VERSION_CODES.M)
 //                @Override
 //                public void onAvailable(Network network) {
+//                    Log.e("lod","onAvailable");
 //                    super.onAvailable(network);
 //
 //                    // 可以通过下面代码将app接下来的请求都绑定到这个网络下请求
@@ -45,6 +48,7 @@
 //            };
 //            connectivityManager.requestNetwork(request, callback);
 //        }else{
+//            Log.e("lod","onCreate else");
 //            runOnUiThread(() -> RtspLiveActivity.start(MainActivitybk.this,""));
 //        }
 //    }

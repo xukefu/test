@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
@@ -129,66 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void play(String url){
-        if (Build.VERSION.SDK_INT >= 21) {
-            final ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkRequest.Builder    builder             = new NetworkRequest.Builder();
-
-            // 设置指定的网络传输类型(蜂窝传输) 等于手机网络
-            builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
-
-            NetworkRequest request = builder.build();
-            ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
-                @TargetApi(Build.VERSION_CODES.M)
-                @Override
-                public void onAvailable(Network network) {
-                    Log.e("test","callbackcallbackcallbackcallback");
-                    super.onAvailable(network);
-
-                    // 可以通过下面代码将app接下来的请求都绑定到这个网络下请求
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        connectivityManager.bindProcessToNetwork(network);
-                    } else {
-                        // 23后这个方法舍弃了
-                        ConnectivityManager.setProcessDefaultNetwork(network);
-                    }
-                    connectivityManager.unregisterNetworkCallback(this);
-
-                    runOnUiThread(() -> RtspLiveActivity.start(MainActivity.this,url));
-                }
-
-                @TargetApi(Build.VERSION_CODES.M)
-                @Override
-                public void onUnavailable() {
-                    Log.e("test","onUnavailable");
-                    System.out.println("onUnavailable");
-                }
-
-                @Override
-                public void onLost(Network network) {
-                    Log.e("test","onLost");
-                    System.out.println("onLost");
-                }
-
-                @Override
-                public void onLinkPropertiesChanged( Network network,
-                                                     LinkProperties linkProperties) {
-                    Log.e("test","onLinkPropertiesChanged");
-                    System.out.println("onLinkPropertiesChanged");
-                }
-
-
-                @Override
-                public void onBlockedStatusChanged( Network network, boolean blocked) {
-                    Log.e("test","onBlockedStatusChanged");
-                    System.out.println("onBlockedStatusChanged");
-                }
-
-
-            };
-            connectivityManager.requestNetwork(request, callback);
-        }else{
-            runOnUiThread(() -> RtspLiveActivity.start(MainActivity.this,url));
-        }
+        RtspLiveActivity.start(MainActivity.this,url);
     }
 }
 
