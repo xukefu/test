@@ -19,7 +19,6 @@ public class RtspLiveActivity extends AppCompatActivity {
 
     public static void start(Context context, String url) {
         Intent starter = new Intent(context, RtspLiveActivity.class);
-//        starter.putExtra("RTSP_URL", url);
         context.startActivity(starter);
         globalUrl = url;
         System.out.println("start:"+globalUrl);
