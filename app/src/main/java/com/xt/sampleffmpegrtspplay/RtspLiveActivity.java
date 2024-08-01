@@ -2,9 +2,11 @@ package com.xt.sampleffmpegrtspplay;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -43,7 +45,21 @@ public class RtspLiveActivity extends AppCompatActivity {
             finish();
         });
 //        setFullScreen();
+        hideNavKey();
     }
+
+    public void hideNavKey() {
+        if (Build.VERSION.SDK_INT < 19) {
+            View v = getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
 
     @SuppressLint("InlinedApi")
     public void setFullScreen() {

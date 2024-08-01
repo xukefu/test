@@ -465,6 +465,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                             break;
                         case IMediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
                             Log.d(TAG, "MEDIA_INFO_BAD_INTERLEAVING:");
+                            Toast.makeText(context, "3秒后开始重新连接", Toast.LENGTH_SHORT).show();
+                            new Handler().postDelayed(() -> {
+                                release(false);
+                                openVideo();
+                            }, 3000);
                             break;
                         case IMediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
                             Log.d(TAG, "MEDIA_INFO_NOT_SEEKABLE:");
