@@ -16,11 +16,10 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
- * @author xt on 2020/7/21 13:21
- * 使用ijkplayer库，功能单一，只有rtsp播放功能，对播放延迟做了优化
+ * @author
+ * 使用ijkplayer库，支持rtsp播放功能，对播放延迟做了优化
  */
 public class RtspPlayer {
-//    private final static String          url = "rtsp://admin:123456@192.168.3.105:554/mpeg4";
     private static final String          TAG = RtspPlayer.class.getSimpleName();
     private              IjkMediaPlayer  mIjkMediaPlayer;
     private              IjkVideoView    mVideoView;
@@ -35,7 +34,6 @@ public class RtspPlayer {
         mLoadingView = loadingView;
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
-
         mVideoView = activity.findViewById(R.id.video_view);
         mVideoView.setIjkPlayerListener(ijkMediaPlayer -> mIjkMediaPlayer = ijkMediaPlayer);
         mVideoView.setOnCompletionListener(iMediaPlayer -> mVideoView.resume());
@@ -45,12 +43,12 @@ public class RtspPlayer {
             }
             return true;
         });
+        mVideoView.setContext(context);
     }
 
     public void startPlay() {
-        Toast toast = Toast.makeText(context, "播放url:"+url, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(context, "开始播放:"+url, Toast.LENGTH_SHORT);
         toast.show();
-        System.out.println("startPlay:"+url);
         mLoadingView.showLoading();
         mVideoView.setVideoPath(url);
         mVideoView.start();

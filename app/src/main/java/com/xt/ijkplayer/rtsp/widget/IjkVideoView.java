@@ -17,15 +17,18 @@
 
 package com.xt.ijkplayer.rtsp.widget;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -36,10 +39,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.exoplayer.C;
 import com.xt.ijkplayer.rtsp.listener.IjkPlayerListener;
 
 import java.io.File;
@@ -55,18 +60,18 @@ import tv.danmaku.ijk.media.player.IjkTimedText;
 import tv.danmaku.ijk.media.player.misc.IMediaDataSource;
 
 public class IjkVideoView extends FrameLayout implements MediaController.MediaPlayerControl {
-    private String              TAG = "IjkVideoView";
+    private String TAG = "IjkVideoView";
     // settable by the client
-    private Uri                 mUri;
+    private Uri mUri;
     private Map<String, String> mHeaders;
 
     // all possible internal states
-    private static final int STATE_ERROR              = -1;
-    private static final int STATE_IDLE               = 0;
-    private static final int STATE_PREPARING          = 1;
-    private static final int STATE_PREPARED           = 2;
-    private static final int STATE_PLAYING            = 3;
-    private static final int STATE_PAUSED             = 4;
+    private static final int STATE_ERROR = -1;
+    private static final int STATE_IDLE = 0;
+    private static final int STATE_PREPARING = 1;
+    private static final int STATE_PREPARED = 2;
+    private static final int STATE_PLAYING = 3;
+    private static final int STATE_PAUSED = 4;
     private static final int STATE_PLAYBACK_COMPLETED = 5;
 
     // mCurrentState is a VideoView object's current state.
@@ -75,42 +80,47 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     // calling pause() intends to bring the object to a target state
     // of STATE_PAUSED.
     private int mCurrentState = STATE_IDLE;
-    private int mTargetState  = STATE_IDLE;
+    private int mTargetState = STATE_IDLE;
+    private Context context;
 
     // All the stuff we need for playing and showing a video
-    private IRenderView.ISurfaceHolder        mSurfaceHolder  = null;
-    private IMediaPlayer                      mMediaPlayer    = null;
+    private IRenderView.ISurfaceHolder mSurfaceHolder = null;
+    private IMediaPlayer mMediaPlayer = null;
     // private int         mAudioSession;
-    private int                               mVideoWidth;
-    private int                               mVideoHeight;
-    private int                               mSurfaceWidth;
-    private int                               mSurfaceHeight;
-    private int                               mVideoRotationDegree;
-    private IMediaController                  mMediaController;
+    private int mVideoWidth;
+    private int mVideoHeight;
+    private int mSurfaceWidth;
+    private int mSurfaceHeight;
+    private int mVideoRotationDegree;
+    private IMediaController mMediaController;
     private IMediaPlayer.OnCompletionListener mOnCompletionListener;
-    private IMediaPlayer.OnPreparedListener   mOnPreparedListener;
-    private int                               mCurrentBufferPercentage;
-    private IMediaPlayer.OnErrorListener      mOnErrorListener;
-    private IMediaPlayer.OnInfoListener       mOnInfoListener;
-    private int                               mSeekWhenPrepared;  // recording the seek position while preparing
-    private boolean                           mCanPause       = true;
-    private boolean                           mCanSeekBack    = true;
-    private boolean                           mCanSeekForward = true;
+    private IMediaPlayer.OnPreparedListener mOnPreparedListener;
+    private int mCurrentBufferPercentage;
+    private IMediaPlayer.OnErrorListener mOnErrorListener;
+    private IMediaPlayer.OnInfoListener mOnInfoListener;
+    private int mSeekWhenPrepared;  // recording the seek position while preparing
+    private boolean mCanPause = true;
+    private boolean mCanSeekBack = true;
+    private boolean mCanSeekForward = true;
 
-    private Context     mAppContext;
+    private Context mAppContext;
     private IRenderView mRenderView;
-    private int         mVideoSarNum;
-    private int         mVideoSarDen;
+    private int mVideoSarNum;
+    private int mVideoSarDen;
 
     private long mPrepareStartTime = 0;
-    private long mPrepareEndTime   = 0;
+    private long mPrepareEndTime = 0;
 
     private long mSeekStartTime = 0;
-    private long mSeekEndTime   = 0;
+    private long mSeekEndTime = 0;
 
     private TextView subtitleDisplay;
 
     private IjkPlayerListener ijkPlayerListener;
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public IjkVideoView(Context context) {
         super(context);
@@ -492,44 +502,32 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                         mMediaController.hide();
                     }
 
-                    /* If an error handler has been supplied, use it and finish. */
                     if (mOnErrorListener != null) {
                         if (mOnErrorListener.onError(mMediaPlayer, framework_err, impl_err)) {
                             return true;
                         }
                     }
 
-                    /* Otherwise, pop up an error dialog so the user knows that
-                     * something bad has happened. Only try and pop up the dialog
-                     * if we're attached to a window. When we're going away and no
-                     * longer have a window, don't bother showing the user an error.
-                     */
                     if (getWindowToken() != null) {
                         Resources r = mAppContext.getResources();
-                        String    message;
+                        String message;
 
                         if (framework_err == MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK) {
                             message = "Invalid progressive playback";
                         } else {
-                            message = "Unknown";
+                            message = "播放失败:" + mUri;
+                            SharedPreferences sharedPreferences =context.getSharedPreferences("RtspUrlsPrefs", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("lastPlayStatus", "false");
+                            editor.apply();
                         }
-
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(message)
-                                .setPositiveButton("OK",
-                                                   new DialogInterface.OnClickListener() {
-                                                       public void onClick(DialogInterface dialog, int whichButton) {
-                                                           /* If we get here, there is no onError listener, so
-                                                            * at least inform them that the video is over.
-                                                            */
-                                                           if (mOnCompletionListener != null) {
-                                                               mOnCompletionListener.onCompletion(mMediaPlayer);
-                                                           }
-                                                       }
-                                                   })
-                                .setCancelable(false)
-                                .show();
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                     }
+                    Toast.makeText(context, "3秒后开始重新连接", Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(() -> {
+                        release(false);
+                        openVideo();
+                    }, 3000);
                     return true;
                 }
             };
@@ -850,15 +848,15 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     // Extend: Aspect Ratio
     //-------------------------
 
-    private static final int[] s_allAspectRatio         = {
+    private static final int[] s_allAspectRatio = {
             IRenderView.AR_ASPECT_FIT_PARENT,
             IRenderView.AR_ASPECT_FILL_PARENT,
             IRenderView.AR_ASPECT_WRAP_CONTENT,
             // IRenderView.AR_MATCH_PARENT,
             IRenderView.AR_16_9_FIT_PARENT,
             IRenderView.AR_4_3_FIT_PARENT};
-    private              int   mCurrentAspectRatioIndex = 1;
-    private              int   mCurrentAspectRatio      = s_allAspectRatio[1];
+    private int mCurrentAspectRatioIndex = 1;
+    private int mCurrentAspectRatio = s_allAspectRatio[1];
 
     public int toggleAspectRatio() {
         mCurrentAspectRatioIndex++;
@@ -873,13 +871,13 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     //-------------------------
     // Extend: Render
     //-------------------------
-    public static final int RENDER_NONE         = 0;
+    public static final int RENDER_NONE = 0;
     public static final int RENDER_SURFACE_VIEW = 1;
     public static final int RENDER_TEXTURE_VIEW = 2;
 
-    private List<Integer> mAllRenders         = new ArrayList<>();
-    private int           mCurrentRenderIndex = 0;
-    private int           mCurrentRender      = RENDER_NONE;
+    private List<Integer> mAllRenders = new ArrayList<>();
+    private int mCurrentRenderIndex = 0;
+    private int mCurrentRender = RENDER_NONE;
 
     private void initRenders() {
         mAllRenders.clear();
@@ -904,7 +902,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     }
 
     public IMediaPlayer createPlayer() {
-        IMediaPlayer   mediaPlayer;
+        IMediaPlayer mediaPlayer;
         IjkMediaPlayer ijkMediaPlayer = null;
         if (mUri != null) {
             ijkMediaPlayer = new IjkMediaPlayer();
@@ -927,7 +925,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "analyzeduration", 100);
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
 
-                ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 8*1);
+                ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 8 * 1);
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_frame", 0);
 
                 ijkMediaPlayer.setOption(1, "analyzemaxduration", 100);

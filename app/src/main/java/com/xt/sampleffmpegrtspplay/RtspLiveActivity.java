@@ -1,10 +1,15 @@
 package com.xt.sampleffmpegrtspplay;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -21,7 +26,6 @@ public class RtspLiveActivity extends AppCompatActivity {
         Intent starter = new Intent(context, RtspLiveActivity.class);
         context.startActivity(starter);
         globalUrl = url;
-        System.out.println("start:"+globalUrl);
     }
 
     @Override
@@ -31,6 +35,29 @@ public class RtspLiveActivity extends AppCompatActivity {
 
         requestPermission();
         initRtsp();
+
+        TextView backHome = findViewById(R.id.button_back);
+        backHome.setOnClickListener(v -> {
+            Intent intent = new Intent(RtspLiveActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+//        setFullScreen();
+    }
+
+    @SuppressLint("InlinedApi")
+    public void setFullScreen() {
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+        attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        attrs.flags |= WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        getWindow().setAttributes(attrs);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     private void initRtsp() {
@@ -57,7 +84,6 @@ public class RtspLiveActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("onResume");
         mRtspPlayer.startPlay();
     }
 

@@ -1,7 +1,6 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".RtspLiveActivity"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,7 +8,17 @@
     <com.xt.ijkplayer.rtsp.widget.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.xt.ijkplayer.rtsp.widget.IjkVideoView>
+        android:layout_height="match_parent" />
 
+    <!-- 返回按钮 -->
+    <TextView
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="16dp"
+        android:text="返回"
+        android:textSize="18sp"
+        android:background="?attr/selectableItemBackgroundBorderless" />
 </RelativeLayout>
